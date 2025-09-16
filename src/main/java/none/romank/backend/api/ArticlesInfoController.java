@@ -3,7 +3,7 @@ package none.romank.backend.api;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,12 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import none.romank.backend.Article;
 import none.romank.backend.ArticleRepository;
+
 
 @RestController
 @CrossOrigin(origins={"localhost://8080"})
@@ -43,14 +47,24 @@ public class ArticlesInfoController {
         }      
         return artRep.findArticlesSortedByDateLatest();
     }
-    @GetMapping
-    public ResponseEntity<Article> getArticlesByDateOldest(@RequestParam("id") Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Article> getArticlesById(@PathVariable("id") Long id) {
         Optional<Article> article = artRep.findById(id);
-        List<Article> artRet = new ArrayList<>();
         if(article.isPresent()){
-            return new ResponseEntity<>(article.get(),HttpStatus.OK);
+            return new ResponseEntity<Article>(article.get(),HttpStatus.OK);
         }
         return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
+    /*curl -X POST -H "Content-Type: application/json" -d '{"authorId":1,"title":"POSTArticle2","taglist":"1,2,3","category":"FINANCE","content":"behold the content2"}' http://localhost:8080/api/articles/addarticle */
+    @PostMapping(path="addarticle",consumes="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Article addArticle(@RequestBody Article article) {
+        article.setDateOfPublish(LocalDate.now());
+        article.setViews(0L);
+        article.sortTags();
+        article.setImagePath("/images/default.png");
+        return artRep.save(article);
+    }
+    
     
 }

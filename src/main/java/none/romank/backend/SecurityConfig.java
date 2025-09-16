@@ -21,7 +21,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpsec) throws Exception{
-        httpsec.authorizeHttpRequests(request ->request.
+        httpsec.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")).
+            authorizeHttpRequests(request ->request.
             requestMatchers("/articles").hasRole(Role.RoleVal.AUTHOR.name()).
             requestMatchers("/","/register","/login","/images/**","/api/**").permitAll().
             anyRequest().authenticated()

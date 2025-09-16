@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +35,10 @@ public class AuthorInfoController {
         return userService.findAuthorsNames();
 
     }
-    @PostMapping(consumes="application/json")
+    //for now this method is a place holder, it has incorrect parameter types and much more errors, IGNORE it.
+    @PostMapping(path="requestauth",consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorityGrantRequest postNewAuthorAuthorityGrantRequest(@RequestParam("username") String entity) {
+    public AuthorityGrantRequest postNewAuthorAuthorityGrantRequest(@RequestBody String entity) {
         
         return null;
     }

@@ -47,7 +47,7 @@ public class Article{
     private Category category; //Spring Data, when seeing an Enum, will just translate it to varchar
     
     @Column(name="status")
-    private String status;
+    private String status = "PENDING";
 
     public Article(){
         
