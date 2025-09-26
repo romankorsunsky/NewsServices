@@ -60,7 +60,6 @@ public class ArticlesInfoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Article addArticle(@RequestBody Article article) {
         article.setDateOfPublish(LocalDate.now());
-        article.setViews(0L);
         article.sortTags();
         article.setImagePath("/images/default.png");
         return artRep.save(article);

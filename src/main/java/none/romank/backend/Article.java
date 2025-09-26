@@ -40,7 +40,7 @@ public class Article{
     private String imagePath;
     
     @Column(name="views")
-    private Long views;
+    private Long views = 0L;
     
     @Enumerated(EnumType.STRING)
     @Column(name="category")
