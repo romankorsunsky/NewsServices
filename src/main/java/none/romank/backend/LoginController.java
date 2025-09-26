@@ -14,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginController {
     @GetMapping("")
     public String login(Model model) {
-        String imageURI = "/images/login.jpg";
-        model.addAttribute("loginImageURI",imageURI);
         return "login";
     }
     

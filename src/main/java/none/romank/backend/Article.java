@@ -35,7 +35,7 @@ public class Article{
     
     @Column(name="tags")
     private String taglist;
-    
+
     @Column(name="image_path")
     private String imagePath;
     

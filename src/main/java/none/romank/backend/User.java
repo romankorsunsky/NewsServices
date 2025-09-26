@@ -20,13 +20,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name="Account")
 @NoArgsConstructor
@@ -40,24 +45,38 @@ public class User implements UserDetails{
 
     @Column(name="username")
     private String userName;
+
     @Column(name="password")
     private String password;
+
     @Column(name="firstname")
     private String firstName;
+
     @Column(name="lastname")
     private String lastName;
+
     @Column(name="email")
     private String email;
+
     @Column(name="created_at")
     private LocalDate dateOfRegistration;
+
     @Column(name="enabled")
     private Boolean enabled;
 
+    @Column(name="credits")
+    private Integer credits;
+
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="account_role",
         joinColumns = @JoinColumn(name = "acc_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ToString.Exclude
+    @OneToMany(mappedBy="account",fetch=FetchType.LAZY)
+    private List<Transaction> transactions;
 
     public User(String userName,String password,String firstName,String lastName,String email,LocalDate date,Boolean enabled){
         this.userName = userName;

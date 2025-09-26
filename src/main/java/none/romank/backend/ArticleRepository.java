@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface ArticleRepository extends CrudRepository<Article,Long>{
-    
+    //remember to change all the queries here from PSGRS native to JPQL which is portable (need to check performnce tradeoffs though)
     @Query(value = "select * from article order by views desc limit :limit",nativeQuery=true)
     public List<Article> findTopXByViews(@Param("limit") Integer limit);
 

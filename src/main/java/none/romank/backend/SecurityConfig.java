@@ -24,8 +24,8 @@ public class SecurityConfig {
         httpsec.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")).
             authorizeHttpRequests(request ->request.
             requestMatchers("/articles").hasRole(Role.RoleVal.AUTHOR.name()).
-            requestMatchers("/","/register","/login","/images/**","/api/**").permitAll().
-            anyRequest().authenticated()
+            requestMatchers("/","/register","/login","/images/**","/api/**","/error").permitAll().
+            anyRequest().authenticated() //this last part: anyRequest().authenticated() says "the rest of the paths are for authenticated users"
         ).
         formLogin(form -> form.
             loginPage("/login").

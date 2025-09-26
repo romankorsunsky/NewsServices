@@ -1,4 +1,4 @@
-package none.romank.backend.api;
+package none.romank.backend.api.Controllers;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import none.romank.backend.ArticleRepository;
 
 
 @RestController
-@CrossOrigin(origins={"localhost://8080"})
+@CrossOrigin(origins={"localhost:8080"})
 @RequestMapping(path="/api/articles",produces="application/json")
 public class ArticlesInfoController {
 
@@ -51,7 +51,7 @@ public class ArticlesInfoController {
     public ResponseEntity<Article> getArticlesById(@PathVariable("id") Long id) {
         Optional<Article> article = artRep.findById(id);
         if(article.isPresent()){
-            return new ResponseEntity<Article>(article.get(),HttpStatus.OK);
+            return new ResponseEntity<>(article.get(),HttpStatus.OK);
         }
         return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
