@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import none.romank.backend.api.Domain.Article;
-import none.romank.backend.api.Repositories.ArticleRepository;
+import none.romank.backend.api.Services.ArticleService;
 
 
 @RestController
@@ -28,11 +29,11 @@ import none.romank.backend.api.Repositories.ArticleRepository;
 @RequestMapping(path="/api/articles",produces="application/json")
 public class ArticlesInfoController {
 
-    private final ArticleRepository artRep;
+    private final ArticleService serv;
 
     @Autowired
-    public ArticlesInfoController(ArticleRepository repo){
-        this.artRep = repo;
+    public ArticlesInfoController(ArticleService serv){
+        this.serv = serv;
     }
 
     @GetMapping(params="bydatelatest")
@@ -45,11 +46,11 @@ public class ArticlesInfoController {
         } catch (IOException e) {
             e.printStackTrace();
         }      
-        return artRep.findArticlesSortedByDateLatest();
+        return serv.findArticlesSortedByDateLatest();
     }
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticlesById(@PathVariable("id") Long id) {
-        Optional<Article> article = artRep.findById(id);
+        Optional<Article> article = serv.findArticleById(id);
         if(article.isPresent()){
             return new ResponseEntity<>(article.get(),HttpStatus.OK);
         }
@@ -62,8 +63,19 @@ public class ArticlesInfoController {
         article.setDateOfPublish(LocalDate.now());
         article.sortTags();
         article.setImagePath("/images/default.png");
-        return artRep.save(article);
+        return serv.saveArticle(article);
     }
     
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Article> deleteArticleById(@PathVariable Long id){
+        Optional<Article> deletedArticle = serv.findArticleById(id);
+        if(deletedArticle.isPresent()){
+            serv.deleteArticleById(id);
+            return new ResponseEntity<>(deletedArticle.get(),HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     
 }
