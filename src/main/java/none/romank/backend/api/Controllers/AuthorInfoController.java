@@ -30,6 +30,5 @@ public class AuthorInfoController {
     @GetMapping(params="authors")
     public List<String> getAuthors() {
         return userService.findAuthorsNames();
-
     }
 }
