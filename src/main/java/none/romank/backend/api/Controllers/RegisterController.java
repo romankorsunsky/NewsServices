@@ -1,4 +1,4 @@
-package none.romank.backend;
+package none.romank.backend.api.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
+import none.romank.backend.api.Domain.RegistrationForm;
+import none.romank.backend.api.Repositories.UserDetailsRepository;
 
 @Slf4j
 @Controller

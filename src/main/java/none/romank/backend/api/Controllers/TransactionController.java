@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import none.romank.backend.Transaction;
-import none.romank.backend.TransactionDTO;
-import none.romank.backend.TransactionRepository;
-import none.romank.backend.User;
-import none.romank.backend.UserDetailsRepository;
+import none.romank.backend.api.Domain.Transaction;
+import none.romank.backend.api.Domain.TransactionDTO;
+import none.romank.backend.api.Domain.User;
+import none.romank.backend.api.Repositories.TransactionRepository;
+import none.romank.backend.api.Repositories.UserDetailsRepository;
 
 
 @RestController

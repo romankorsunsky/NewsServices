@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import none.romank.backend.Article;
-import none.romank.backend.ArticleRepository;
+import none.romank.backend.api.Domain.Article;
+import none.romank.backend.api.Repositories.ArticleRepository;
 
 
 @RestController

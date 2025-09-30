@@ -1,4 +1,4 @@
-package none.romank.backend;
+package none.romank.backend.api.Domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

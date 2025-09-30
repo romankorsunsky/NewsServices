@@ -1,4 +1,4 @@
-package none.romank.backend;
+package none.romank.backend.api.Domain;
 
 import lombok.Getter;
 import lombok.Setter;

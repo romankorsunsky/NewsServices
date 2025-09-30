@@ -1,4 +1,4 @@
-package none.romank.backend;
+package none.romank.backend.api.Repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import none.romank.backend.api.Domain.Article;
 
 public interface ArticleRepository extends CrudRepository<Article,Long>{
     //remember to change all the queries here from PSGRS native to JPQL which is portable (need to check performnce tradeoffs though)

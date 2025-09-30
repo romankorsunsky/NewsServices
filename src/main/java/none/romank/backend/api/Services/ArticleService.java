@@ -1,4 +1,4 @@
-package none.romank.backend;
+package none.romank.backend.api.Services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import none.romank.backend.api.Domain.Article;
+import none.romank.backend.api.Repositories.ArticleRepository;
 
 @Service
 @Component
