@@ -45,9 +45,6 @@ public class Article{
     @Enumerated(EnumType.STRING)
     @Column(name="category")
     private Category category; //Spring Data, when seeing an Enum, will just translate it to varchar
-    
-    @Column(name="status")
-    private String status = "PENDING";
 
     public Article(){
         
@@ -65,5 +62,16 @@ public class Article{
 
     public enum Category {
         MILITARY, ISRAEL, US, FINANCE, UKRAINE, OPINION, OTHER
+    }
+
+    public static ArticleDTO toDTO(Article article){
+        return new ArticleDTO(
+            article.authorId,
+            article.dateOfPublish,
+            article.title,
+            article.content,
+            article.imagePath,
+            article.taglist,
+            article.views);
     }
 }

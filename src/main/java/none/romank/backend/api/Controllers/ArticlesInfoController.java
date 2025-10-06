@@ -36,7 +36,7 @@ public class ArticlesInfoController {
         this.serv = serv;
     }
 
-    @GetMapping(params="bydatelatest")
+    @GetMapping(path="/bydatelatest")
     public List<Article> getArticlesByDateLatest() {
         BufferedWriter wr; 
         wr = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -51,19 +51,29 @@ public class ArticlesInfoController {
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticlesById(@PathVariable("id") Long id) {
         Optional<Article> article = serv.findArticleById(id);
+        System.out.println("========================GETTING ARTICLE=====================");
         if(article.isPresent()){
             return new ResponseEntity<>(article.get(),HttpStatus.OK);
         }
-        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    /*curl -X POST -H "Content-Type: application/json" -d '{"authorId":1,"title":"POSTArticle2","taglist":"1,2,3","category":"FINANCE","content":"behold the content2"}' http://localhost:8080/api/articles/addarticle */
+    /*curl -v -X POST -H "Content-Type: application/json" -d '{"authorId":1,"title":"POSTArticle2","taglist":"1,2,3","category":"FINANCE","content":"behold the content2"}' http://localhost:8080/api/articles/addarticle */
     @PostMapping(path="addarticle",consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Article addArticle(@RequestBody Article article) {
+    public ResponseEntity<Article> addArticle(@RequestBody Article article) {
+        ResponseEntity<Article> response;
         article.setDateOfPublish(LocalDate.now());
         article.sortTags();
         article.setImagePath("/images/default.png");
-        return serv.saveArticle(article);
+        System.out.println("========================POSTING ARTICLE=====================");
+        try{
+            Article articleSaved = serv.saveArticle(article);
+            return new ResponseEntity<>(articleSaved, HttpStatus.OK);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     @DeleteMapping("/delete/{id}")

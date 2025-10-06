@@ -9,7 +9,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import none.romank.backend.ArticleCreateFailException;
 import none.romank.backend.api.Domain.Article;
 import none.romank.backend.api.Repositories.ArticleRepository;
 
@@ -25,17 +24,17 @@ public class ArticleService {
         
     }
 
-    public Article saveArticle(Article article){
+    public Article saveArticle(Article article) throws Exception{
         Article a;
         try {
             a = artRep.save(article);
             return a;
         } 
         catch (OptimisticLockingFailureException e) {
-            throw new ArticleCreateFailException("Failed to create try again");
+            throw new Exception("Failed to create try again");
         }
         catch (IllegalArgumentException e) {
-            throw new ArticleCreateFailException("Bad Article");
+            throw new Exception("Bad Article");
         }
 
     }
