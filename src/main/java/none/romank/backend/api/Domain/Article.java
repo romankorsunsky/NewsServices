@@ -2,14 +2,19 @@ package  none.romank.backend.api.Domain;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,11 +26,8 @@ public class Article{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id; 
 
-    @Column(name="date_of_pub")
+    @Column(name="created_at")
     private LocalDate dateOfPublish;
-    
-    @Column(name="author_id")
-    private Long authorId;
     
     @Column(name="title")
     private String title;
@@ -36,7 +38,7 @@ public class Article{
     @Column(name="tags")
     private String taglist;
 
-    @Column(name="image_path")
+    @Column(name="imguri")
     private String imagePath;
     
     @Column(name="views")
@@ -45,6 +47,13 @@ public class Article{
     @Enumerated(EnumType.STRING)
     @Column(name="category")
     private Category category; //Spring Data, when seeing an Enum, will just translate it to varchar
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="author_id")
+    private Author author;
+
+    @OneToMany(mappedBy="article",fetch=FetchType.LAZY)
+    private Set<Comment> comments;
 
     public Article(){
         
@@ -66,12 +75,14 @@ public class Article{
 
     public static ArticleDTO toDTO(Article article){
         return new ArticleDTO(
-            article.authorId,
+            article.id,
+            article.getAuthor().getId(),
             article.dateOfPublish,
             article.title,
             article.content,
             article.imagePath,
             article.taglist,
-            article.views);
+            article.views,
+            article.category.name());
     }
 }

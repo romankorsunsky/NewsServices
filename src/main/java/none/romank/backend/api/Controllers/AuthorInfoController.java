@@ -9,16 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping; 
+import org.springframework.web.bind.annotation.PostMapping; 
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import none.romank.backend.api.Domain.Author;
 import none.romank.backend.api.Domain.AuthorDTO;
-import none.romank.backend.api.Domain.User;
 import none.romank.backend.api.Services.AuthorService;
-
-
-
 
 
 @RestController
@@ -26,7 +24,6 @@ import none.romank.backend.api.Services.AuthorService;
 @CrossOrigin(origins={"http://localhost:8080"})
 public class AuthorInfoController {
 
-    //private final UserDetailsRepository userRepo;
     private final AuthorService authorService;
 
     
@@ -34,20 +31,23 @@ public class AuthorInfoController {
     public AuthorInfoController(AuthorService authorService){
         this.authorService = authorService;
     }
+    @PostMapping("/sync")
+    public ResponseEntity<AuthorDTO> postAuthor(@RequestBody Author author) {
+        return ResponseEntity.of(authorService.saveAuthor(author));
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthorInfo(@PathVariable("id") Long id) {
-        Optional<Author> authContainer = authorService.findAuthorById(id);
-        if(authContainer.isPresent()){
-            Author author = authContainer.get();
-            User user = author.getUser();
-            AuthorDTO adto = new AuthorDTO(user,author.getPfpUri(), author.getBio());
+        Optional<AuthorDTO> authdtoContainer = authorService.findAuthorById(id);
+        if(authdtoContainer.isPresent()){    
+            AuthorDTO adto = authdtoContainer.get();
             return new ResponseEntity<>(adto,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(params="authors")
-    public List<String> getAuthors() {
+    public List<String> getAuthorNames() {
         return authorService.findAllAuthorNames();
     }
 }

@@ -2,6 +2,7 @@ package none.romank.backend;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
  
 @Configuration
+@Profile("!dev")
 public class SecurityConfig {
     
     @Bean("bCryptEncoder")
@@ -28,13 +30,7 @@ public class SecurityConfig {
             securityMatcher("/**").
             authorizeHttpRequests(request ->request.
             requestMatchers("/articles").hasRole("AUTHOR").
-            requestMatchers("/","/register","/login","/images/**","/error"/*"/api/articles/**"*/).permitAll()).
-        formLogin(form -> form.
-            loginPage("/login").
-            loginProcessingUrl("/login").
-            defaultSuccessUrl("/")).
-        logout(lo -> lo.permitAll());
-
+            requestMatchers("/","/register","/login","/images/**","/error"/*"/api/articles/**"*/).permitAll());
         return httpsec.build();
     }
 

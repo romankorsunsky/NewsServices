@@ -3,6 +3,7 @@ package none.romank.backend.api.Services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static java.util.stream.Collectors.toList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import none.romank.backend.api.Domain.Article;
+import none.romank.backend.api.Domain.ArticleDTO;
 import none.romank.backend.api.Repositories.ArticleRepository;
 
 @Service
@@ -24,12 +26,13 @@ public class ArticleService {
         
     }
 
-    public Article saveArticle(Article article) throws Exception{
+    public ArticleDTO saveArticle(Article article) throws Exception{
         Article a;
         try {
             a = artRep.save(article);
-            return a;
+            return Article.toDTO(a);
         } 
+        //check that such an Author exists.
         catch (OptimisticLockingFailureException e) {
             throw new Exception("Failed to create try again");
         }
@@ -39,22 +42,24 @@ public class ArticleService {
 
     }
 
-    public List<Article> getFeedArticles(){
-        List<Article> res = new ArrayList<>();
-        for (Article a : artRep.findTopXByViews(5)) {
-            res.add(a);   
+    public List<ArticleDTO> getFeedArticles(){
+        List<Article> articles = artRep.findTopXByViews(5);
+        List<ArticleDTO> result = new ArrayList<>(0);
+        for (Article a : articles) {
+            result.add(Article.toDTO(a));   
         }
-        return res;
+        return result;
     }
 
-    public Optional<Article> findArticleById(Long id){
-        return artRep.findById(id);
+    public Optional<ArticleDTO> findArticleById(Long id){
+        Optional<Article> artContainer = artRep.findById(id);
+        Optional<ArticleDTO> result = Optional.ofNullable(Article.toDTO(artContainer.get()));
+        return result;
     }
 
-    public List<Article> findArticlesSortedByDateLatest(){
-        List<Article> articles;
-        articles = artRep.findArticlesSortedByDateLatest();
-        return articles;
+    public List<ArticleDTO> findArticlesSortedByDateLatest(){
+        return artRep.findArticlesSortedByDateLatest().stream().
+            map(article -> Article.toDTO(article)).collect(toList());
     }
 
     public void deleteArticleById(Long id) {

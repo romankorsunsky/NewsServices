@@ -29,6 +29,6 @@ public interface ArticleRepository extends CrudRepository<Article,Long>{
     @Modifying
     public int updateStatusByTitle(@Param("title") String title,@Param("newStatus") String newStatus);
 
-    @Query(value="select * from article order by date_of_pub desc",nativeQuery=true)
+    @Query(value="select * from article order by created_at desc",nativeQuery=true)
     public List<Article> findArticlesSortedByDateLatest();
 }
