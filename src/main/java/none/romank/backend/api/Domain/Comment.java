@@ -26,7 +26,7 @@ public class Comment {
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="commentor_id")
-    private User commentor; //nirali I need commentator ve lo commentor aval lo meshane
+    private User commentor; //I think I need commentator ve lo commentor aval lo meshane
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="article_id")
@@ -34,5 +34,9 @@ public class Comment {
 
     public Long getId(){
         return this.id;
+    }
+
+    public static CommentDTO toDTO(Comment comment){
+        return new CommentDTO(comment);
     }
 }

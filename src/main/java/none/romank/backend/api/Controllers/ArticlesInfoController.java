@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import none.romank.backend.api.Domain.Article;
 import none.romank.backend.api.Domain.ArticleDTO;
 import none.romank.backend.api.Services.ArticleService;
+
 
 
 @RestController
@@ -55,7 +57,7 @@ public class ArticlesInfoController {
     @PostMapping(path="addarticle",consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ArticleDTO> addArticle(@RequestBody Article article) {
-        article.setDateOfPublish(LocalDate.now());
+        article.setCreatedAt(LocalDate.now());
         article.sortTags();
         article.setImagePath("/images/default.png");
         System.out.println("CREATING ARTICLE !");
@@ -79,6 +81,15 @@ public class ArticlesInfoController {
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping("/update/content/{id}")
+    public ResponseEntity<Void> changeArticleContent(@PathVariable Long id, @RequestBody Article article) {
+        Optional<Object> changed = serv.changeArticleContent(id,article);
+        if(changed.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     
 }

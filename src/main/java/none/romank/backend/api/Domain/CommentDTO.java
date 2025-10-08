@@ -20,5 +20,4 @@ public class CommentDTO {
         this.commentor_id = comment.getCommentor().getId();
         this.article_id = comment.getArticle().getId();
     }
-  
 }

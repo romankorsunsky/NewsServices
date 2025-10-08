@@ -29,5 +29,4 @@ public class UserInfoController {
         ResponseEntity<UserDTO> response = ResponseEntity.of(userService.saveUser(user));
         return response;
     }
-    
 }

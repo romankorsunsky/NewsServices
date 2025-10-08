@@ -9,7 +9,7 @@ public class ArticleDTO{
     
     private Long id;
 
-    private LocalDate dateOfPublish;
+    private LocalDate createdAt;
     private Long authorId;
     private String title;
     private String content;
@@ -18,10 +18,10 @@ public class ArticleDTO{
     private String imagePath;
     private Long views;
 
-    public ArticleDTO(Long id,Long authorId,LocalDate dateOfPublish,String title,String content,String taglist,String imagePath,Long views,String category){
+    public ArticleDTO(Long id,Long authorId,LocalDate createdAt,String title,String content,String taglist,String imagePath,Long views,String category){
         this.id = id;
         this.authorId = authorId;
-        this.dateOfPublish = dateOfPublish;
+        this.createdAt = createdAt;
         this.title = title;
         this.content = content;
         this.taglist = taglist;

@@ -15,20 +15,17 @@ public interface ArticleRepository extends CrudRepository<Article,Long>{
     @Query(value = "select * from article order by views desc limit :limit",nativeQuery=true)
     public List<Article> findTopXByViews(@Param("limit") Integer limit);
 
-    @Query(value = "select * from article where author_id = :id",nativeQuery=true)
+    @Query(value = "SELECT a FROM Article a WHERE a.author.id =:id")
     public List<Article> findByAuthorId(@Param("id") Long id);
 
-    @Query(value = "select * from article where title = :title",nativeQuery=true)
+    @Query(value = "SELECT a FROM Article a WHERE title =:title") //don't forget to make sure that title is UNIQUE in the DB
     public Optional<Article> findByTitle(@Param("title") String title);
 
-    @Query(value = "update article set status = :status where id = :id",nativeQuery=true)
-    @Modifying //test if I need to remove it later, but it makes sense to add it because we dont retreive the Article object later
-    public int updateStatusById(@Param("id") Long id,@Param("status") String status);
-
-    @Query(value="update article set status = :newStatus where title =:title",nativeQuery=true)
+    @Query(value="UPDATE Article a SET a.content =:content WHERE a.id =:id")
     @Modifying
-    public int updateStatusByTitle(@Param("title") String title,@Param("newStatus") String newStatus);
+    public int updateStatusByTitle(@Param("id") Long id,@Param("content") String content);
 
-    @Query(value="select * from article order by created_at desc",nativeQuery=true)
-    public List<Article> findArticlesSortedByDateLatest();
+    @Query(value="SELECT a FROM Article a ORDER BY a.createdAt DESC LIMIT :limit")
+    public List<Article> findArticlesSortedByDateLatestLimitX(@Param("limit") Long limit);
+
 }

@@ -27,7 +27,7 @@ public class Article{
     private Long id; 
 
     @Column(name="created_at")
-    private LocalDate dateOfPublish;
+    private LocalDate createdAt;
     
     @Column(name="title")
     private String title;
@@ -77,7 +77,7 @@ public class Article{
         return new ArticleDTO(
             article.id,
             article.getAuthor().getId(),
-            article.dateOfPublish,
+            article.createdAt,
             article.title,
             article.content,
             article.imagePath,

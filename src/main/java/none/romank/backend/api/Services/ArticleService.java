@@ -10,6 +10,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import none.romank.backend.api.Domain.Article;
 import none.romank.backend.api.Domain.ArticleDTO;
 import none.romank.backend.api.Repositories.ArticleRepository;
@@ -17,7 +18,7 @@ import none.romank.backend.api.Repositories.ArticleRepository;
 @Service
 @Component
 public class ArticleService {
-
+    private static final int MAX_CONTENT_LENGTH = 256;
     private final ArticleRepository artRep;
 
     @Autowired
@@ -58,11 +59,29 @@ public class ArticleService {
     }
 
     public List<ArticleDTO> findArticlesSortedByDateLatest(){
-        return artRep.findArticlesSortedByDateLatest().stream().
+        return artRep.findArticlesSortedByDateLatestLimitX(10L).stream(). //change 10L later to mean somwthing
             map(article -> Article.toDTO(article)).collect(toList());
     }
 
     public void deleteArticleById(Long id) {
         artRep.deleteById(id);
+    }
+
+    @Transactional
+    public Optional<Object> changeArticleContent(Long id,Article artWithContent) {
+        Optional<Article> artCont = artRep.findById(id);
+        if(artCont.isPresent()){
+            Article article = artCont.get();
+            String content = artWithContent.getContent();
+            if(content != null && content.length() > 0 && content.length() <= MAX_CONTENT_LENGTH){
+                //I mean, reallistically I should add editorial_status to each Article entity to approve
+                //the content, or at least filter some bad words, I don't know. 
+                article.setContent(content);
+                artRep.save(article);
+                return Optional.of(true);
+            }
+            return Optional.empty();
+        }
+        return Optional.empty();
     }
 }
