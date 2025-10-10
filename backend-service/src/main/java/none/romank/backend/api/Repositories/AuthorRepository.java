@@ -10,6 +10,6 @@ import none.romank.backend.api.Domain.Author;
 
 @Repository
 public interface AuthorRepository extends CrudRepository<Author, Long>{
-    @Query(value="SELECT a from Authors a")
+    @Query(value="SELECT a FROM Author a")
     public List<Author> findAllAuthors();
 }
