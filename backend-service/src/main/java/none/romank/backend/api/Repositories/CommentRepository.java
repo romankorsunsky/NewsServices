@@ -12,7 +12,7 @@ import none.romank.backend.api.Domain.Comment;
 @Repository
 public interface CommentRepository extends CrudRepository<Comment,Long>{
 
-    @Query(value="select * from Comments where article_id = :articleId",nativeQuery=true)
+    @Query(value="SELECT c FROM Comment c WHERE c.article.id =:articleId")
     public List<Comment> getCommentsForArticleById(@Param("articleId") Long articleId);
 
     //here because I added in the @Entity classes the @ManyToOne and @OneToMany annotations to create relationships

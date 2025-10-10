@@ -41,10 +41,13 @@ public class SecurityConfig {
             securityMatcher("/api/**").
             authorizeHttpRequests(request -> 
             request.
-            requestMatchers(HttpMethod.GET,"/api/articles/**").permitAll().
+            requestMatchers(HttpMethod.GET,"/api/articles/**","/api/comments/forarticle/**").permitAll().
             requestMatchers(HttpMethod.DELETE,"/api/articles/{id}").hasAuthority("SCOPE_delete-article").
             requestMatchers(HttpMethod.POST,"/api/articles/**").hasAuthority("SCOPE_post-article").
-            requestMatchers(HttpMethod.PUT,"/api/articles/{id}").hasAuthority("SCOPE_put-article")).
+            requestMatchers(HttpMethod.PUT,"/api/articles/{id}").hasAuthority("SCOPE_put-article").
+            requestMatchers(HttpMethod.POST,"/api/comments/**").authenticated().
+            requestMatchers(HttpMethod.POST,"/api/users/sync").hasAuthority("SCOPE_sync-users")
+            ).
             oauth2ResourceServer(oa2 -> oa2.jwt(Customizer.withDefaults())).
             exceptionHandling(e -> e.accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                     .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()));
