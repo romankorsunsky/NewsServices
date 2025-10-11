@@ -1,5 +1,6 @@
 package none.romank.authserv;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection= "users")
-public class User implements  UserDetails{
-
+public class User implements UserDetails{
     @Id
     private String username;
 
@@ -46,6 +46,15 @@ public class User implements  UserDetails{
         }
         return authorities;
     }
+    static boolean isOk(User user) {
+        SecureRandom rnd = new SecureRandom();
+        float num = rnd.nextFloat(0.0f, 1.0f);
+        if(num > 0.5f){
+            return true;
+        }
+        return false;
+    }
+
 
     @Override 
     public boolean isAccountNonExpired(){

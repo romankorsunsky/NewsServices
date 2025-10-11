@@ -65,13 +65,20 @@ public class AuthorizationServerConfig {
     @Bean
     OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() throws Exception{
         return (encodingContext) -> {
-            if(OAuth2TokenType.ACCESS_TOKEN.getValue().equals(encodingContext.getTokenType().getValue())){
+            if (encodingContext.getAuthorizationGrantType().getValue().equals(
+                AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())) {
+                List<String> claims = new ArrayList<>();
+                claims.add("sync-users");
+                Authentication authentication = encodingContext.getPrincipal();
+                encodingContext.getClaims().claim("scope",claims);
+
+            }
+            else if(OAuth2TokenType.ACCESS_TOKEN.getValue().equals(encodingContext.getTokenType().getValue())){
                 Authentication principal = encodingContext.getPrincipal();
                 List<String> authorities = 
                     principal.getAuthorities().stream().map(
                         authority -> authority.getAuthority()
                     ).collect(Collectors.toList());
-                //Set<String> potentialScopes = encodingContext.getAuthorizedScopes();
                 Set<String> allowedScopes = new HashSet<>();
                 
                 //check if we have author role
@@ -118,7 +125,7 @@ public class AuthorizationServerConfig {
             build();
         RegisteredClient userSyncClient = RegisteredClient.withId(UUID.randomUUID().toString()).
             clientId("authorization-server-client").
-            clientSecret("authorization-server-client").
+            clientSecret(encoder.encode("authorization-server-client")).
             clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC).
             authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS).
             redirectUri("http://localhost:9090/login/oauth2/code/authorization-server-client").
