@@ -2,6 +2,7 @@ package none.romank.authserv;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +20,13 @@ public class RegisterUserController {
     }
     @PostMapping("/adduser")
     public ResponseEntity<UserDTO> postMethodName(@RequestBody UserRegistration userRegistration) {
-        System.out.println("==============================================================");
-        UserDTO dto = userRegService.addUser(userRegistration);
-        return ResponseEntity.ok().body(dto);
+        try {
+            UserDTO dto = userRegService.addUser(userRegistration);
+            return new ResponseEntity(dto,HttpStatus.OK); //could write: return ResponseEntity.ok().body(dto)
+        } catch (BadUserRegistrationException e) {
+            var msg = e.getMessage();
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
     
 }

@@ -14,15 +14,18 @@ import lombok.Data;
 @Data
 public class AppStartActions implements ApplicationListener<ApplicationReadyEvent>{
 
+    /*
+     * Here I was just testing the user/sync endpoint after user registration;
+     */
     @Override
     public void onApplicationEvent(ApplicationReadyEvent e){
         //Test if registration works
         RestClient rc = RestClient.builder().baseUrl("http://localhost:9000/adduser").build();
-        String username = "user3";
+        String username = "user4";
         String password = "youwillneverfind";
-        String email = "some-email@gmail.com";
+        String email = "someother-email@gmail.com";
         String firstName = "Sauron";
-        String lastName = "The Evil";
+        String lastName = "Theevil";
         UserRegistration reg = new UserRegistration(username,password,email,firstName,lastName);
 
         ResponseEntity<Void> resp = rc.post().

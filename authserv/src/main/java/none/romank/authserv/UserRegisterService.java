@@ -19,17 +19,22 @@ import org.springframework.web.client.RestClient;
 @Service
 @Qualifier("userRegistrationService")
 public class UserRegisterService {
-    private UserDetailsRepository userDetailsRepository;
-    private OAuth2AuthorizedClientManager manager;
-    
+    private final UserDetailsRepository userDetailsRepository;
+    private final OAuth2AuthorizedClientManager manager;
+    private final UserRegistrationValidator registrationValidator;
     @Autowired
     public UserRegisterService(UserDetailsRepository userDetailsRepository,
-        OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager){
+        OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager,
+        @Qualifier("userRegistrationValidator") UserRegistrationValidator userRegistrationValidator){
         this.userDetailsRepository = userDetailsRepository;
         this.manager = oAuth2AuthorizedClientManager;
+        this.registrationValidator = userRegistrationValidator;
     }
 
-    public UserDTO addUser(UserRegistration user) {
+    public UserDTO addUser(UserRegistration user) throws BadUserRegistrationException{
+        if(registrationValidator.validate(user).isEmpty()){
+            throw new BadUserRegistrationException("Bad User Registration");
+        }
         User actualUser;
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         actualUser = new User();
@@ -43,7 +48,6 @@ public class UserRegisterService {
         actualUser.setRoles(Arrays.asList("ROLE_USER"));
         
         UserDTO dto = new UserDTO(userDetailsRepository.save(actualUser));
-        System.out.println("THE USER DTO LOOKS LIKE THIS:" + dto.toString());
         RestClient restClient = RestClient.builder().baseUrl("http://localhost:8080/api/users").build();
         OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest.
             withClientRegistrationId("authorization-server-client").

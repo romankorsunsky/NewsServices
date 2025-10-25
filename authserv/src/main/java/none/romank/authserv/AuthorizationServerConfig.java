@@ -69,7 +69,6 @@ public class AuthorizationServerConfig {
                 AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())) {
                 List<String> claims = new ArrayList<>();
                 claims.add("sync-users");
-                Authentication authentication = encodingContext.getPrincipal();
                 encodingContext.getClaims().claim("scope",claims);
 
             }
@@ -84,20 +83,20 @@ public class AuthorizationServerConfig {
                 //check if we have author role
                
                 if(authorities.contains("ROLE_ADMIN")){
-                    allowedScopes.add("get-article");
-                    allowedScopes.add("put-article");
-                    allowedScopes.add("delete-article");
-                    allowedScopes.add("post-article");
+                    allowedScopes.add("get");
+                    allowedScopes.add("put");
+                    allowedScopes.add("delete");
+                    allowedScopes.add("post");
                 }
 
                 else if(authorities.contains("ROLE_AUTHOR")){
-                    allowedScopes.add("get-article");
-                    allowedScopes.add("put-article");
-                    allowedScopes.add("post-article");
+                    allowedScopes.add("get");
+                    allowedScopes.add("put");
+                    allowedScopes.add("post");
                 }
 
                 else if(authorities.contains("ROLE_USER")){
-                    allowedScopes.add("get-article");
+                    allowedScopes.add("get");
                 }
             
                 encodingContext.getClaims().claim("scope",allowedScopes);
