@@ -31,11 +31,20 @@ public class AuthorInfoController {
     public AuthorInfoController(AuthorService authorService){
         this.authorService = authorService;
     }
+
+    /* THis endpoint is for the authorization server to sync newly created Author
+     * Returns a DTO so that the sender can verify data saved correctly
+     * 
+     */
     @PostMapping("/sync")
     public ResponseEntity<AuthorDTO> postAuthor(@RequestBody Author author) {
         return ResponseEntity.of(authorService.saveAuthor(author));
     }
     
+    /*
+     * Returns an author by their Id with status OK,
+     * Returns a response with no body and status NOT_FOUND.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getAuthorInfo(@PathVariable("id") Long id) {
         Optional<AuthorDTO> authdtoContainer = authorService.findAuthorById(id);
@@ -46,6 +55,9 @@ public class AuthorInfoController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
+    /*
+     * Returns the list of the names of the authors.
+     */
     @GetMapping(params="authors")
     public List<String> getAuthorNames() {
         return authorService.findAllAuthorNames();

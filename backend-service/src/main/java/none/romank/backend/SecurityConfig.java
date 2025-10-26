@@ -29,7 +29,6 @@ public class SecurityConfig {
         httpsec.csrf(csrf -> csrf.ignoringRequestMatchers("/**")).
             securityMatcher("/**").
             authorizeHttpRequests(request ->request.
-            requestMatchers("/articles").hasRole("AUTHOR").
             requestMatchers("/","/register","/login","/images/**","/error"/*"/api/articles/**"*/).permitAll());
         return httpsec.build();
     }
@@ -42,9 +41,9 @@ public class SecurityConfig {
             authorizeHttpRequests(request -> 
             request.
             requestMatchers(HttpMethod.GET,"/api/articles/**","/api/comments/forarticle/**").permitAll().
-            requestMatchers(HttpMethod.DELETE,"/api/articles/{id}").hasAuthority("SCOPE_delete-article").
-            requestMatchers(HttpMethod.POST,"/api/articles/**").hasAuthority("SCOPE_post-article").
-            requestMatchers(HttpMethod.PUT,"/api/articles/{id}").hasAuthority("SCOPE_put-article").
+            requestMatchers(HttpMethod.DELETE,"/api/**").hasAuthority("SCOPE_delete").
+            requestMatchers(HttpMethod.POST,"/api/articles/**").hasAuthority("SCOPE_post").
+            requestMatchers(HttpMethod.PUT,"/api/articles/{id}").hasAuthority("SCOPE_put").
             requestMatchers(HttpMethod.POST,"/api/comments/**").authenticated().
             requestMatchers(HttpMethod.POST,"/api/users/sync").hasAuthority("SCOPE_sync-users")
             ).

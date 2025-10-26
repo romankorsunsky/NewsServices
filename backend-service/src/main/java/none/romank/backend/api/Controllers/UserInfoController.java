@@ -24,6 +24,9 @@ public class UserInfoController {
         this.userService = userService;
     }
 
+    /*
+     * Here is the authorization endpoint of the Authorization Server propagating a new user to this service.
+     */
     @PostMapping("/sync")
     public ResponseEntity<UserDTO> postMethodName(@RequestBody User user) {
         ResponseEntity<UserDTO> response = ResponseEntity.of(userService.saveUser(user));

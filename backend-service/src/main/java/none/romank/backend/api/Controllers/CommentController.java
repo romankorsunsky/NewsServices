@@ -28,13 +28,21 @@ public class CommentController {
     public CommentController(CommentService commServ){
         this.commentService = commServ;
     }
-
+    /*
+     * Returns a list of comments for a specific article,
+     * RestClient is smart enough to creatve an empty HTTP response body if the Optional<> argument
+     * in it's creation return false on opt.isPresent()
+     */
     @GetMapping("/forarticle/{id}")
     public ResponseEntity<List<CommentDTO>> getCommentsForArticle(@PathVariable Long articleId) {
         List<CommentDTO> comments;
         comments = commentService.getCommentsByArticleId(articleId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
+
+    /*
+     * add a comment, it is the sender's responsibility to provide an user id and article id
+     */
     @PostMapping("/addcomment")
     public ResponseEntity<CommentDTO> addCommentForArticle(@RequestBody Comment cmnt) {
         CommentDTO comm = commentService.addComment(cmnt).get();

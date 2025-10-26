@@ -54,7 +54,7 @@ public class ArticlesInfoController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     /*curl -v -X POST -H "Content-Type: application/json" -d '{"authorId":1,"title":"POSTArticle2","taglist":"1,2,3","category":"FINANCE","content":"behold the content2"}' http://localhost:8080/api/articles/addarticle */
-    @PostMapping(path="addarticle",consumes="application/json")
+    @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ArticleDTO> addArticle(@RequestBody Article article) {
         article.setCreatedAt(LocalDate.now());
