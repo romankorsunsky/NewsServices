@@ -2,6 +2,8 @@ package none.romank.authserv;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class UserRegistrationValidatorImpl implements UserRegistrationValidator{
     private UserRegistrationValidatorImpl(){}
@@ -11,6 +13,7 @@ public class UserRegistrationValidatorImpl implements UserRegistrationValidator{
      */
     @Override
     public Optional<UserRegistration> validate(UserRegistration userReg) {
+        final Logger log = LogManager.getLogger();
         if(userReg == null || userReg.getUsername() == null || userReg.getEmail() == null || userReg.getPassword() == null 
             || userReg.getFirstName() == null || userReg.getLastName() == null)
         {
@@ -36,7 +39,8 @@ public class UserRegistrationValidatorImpl implements UserRegistrationValidator{
             !upperCase.matcher(password).find() ||
             !lowerCase.matcher(password).find() ||
             !digits.matcher(password).find())
-        {
+        {   
+            log.info("BAD PASSWORD !");
             return Optional.empty();
         }
 
@@ -45,14 +49,18 @@ public class UserRegistrationValidatorImpl implements UserRegistrationValidator{
             username.length() > 16 ||
             !usernameRegex.matcher(username).matches())
         {
+            log.info("BAD USERNAME !");
             return Optional.empty();
         }
 
-        if(!emailRegex.matcher(email).matches()){
+        if(!emailRegex.matcher(email).matches())
+        {
+            log.info("BAD EMAIL !");
             return Optional.empty();
         }
         if(!fl_nameRegex.matcher(lname).matches() || !fl_nameRegex.matcher(fname).matches())
         {
+            log.info("BAD FIRST MAME OR LAST NAME !");
             return Optional.empty();
         }
         return Optional.of(userReg);

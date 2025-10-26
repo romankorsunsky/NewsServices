@@ -21,8 +21,8 @@ public class AppStartActions implements ApplicationListener<ApplicationReadyEven
     public void onApplicationEvent(ApplicationReadyEvent e){
         //Test if registration works
         RestClient rc = RestClient.builder().baseUrl("http://localhost:9000/adduser").build();
-        String username = "user4";
-        String password = "youwillneverfind";
+        String username = "user445";
+        String password = "Secretpassword2";
         String email = "someother-email@gmail.com";
         String firstName = "Sauron";
         String lastName = "Theevil";
